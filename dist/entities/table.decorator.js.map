@@ -1,0 +1,1 @@
+{"version":3,"file":"table.decorator.js","sourceRoot":"","sources":["../../src/entities/table.decorator.ts"],"names":[],"mappings":"AAAA,OAAO,kBAAkB,CAAC;AAG1B,MAAM,CAAC,MAAM,kBAAkB,GAAG,MAAM,CAAC,OAAO,CAAC,CAAC;AAElD,MAAM,UAAU,KAAK,CAA8B,SAAiB;IAChE,OAAO,UAAS,MAAS;QACrB,OAAO,CAAC,cAAc,CAAC,kBAAkB,EAAE,SAAS,EAAE,MAAM,CAAC,CAAC;IAClE,CAAC,CAAC;AACN,CAAC"}
