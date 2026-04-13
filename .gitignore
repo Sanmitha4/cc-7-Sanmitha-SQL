@@ -1,3 +1,4 @@
+
 # macOS junk
 .DS_Store
 __MACOSX/
@@ -7,3 +8,11 @@ __MACOSX/
 
 # Node junk
 node_modules/
+
+# TypeScript build outputs
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+
+dist/
