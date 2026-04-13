@@ -1,0 +1,9 @@
+# macOS junk
+.DS_Store
+__MACOSX/
+
+# Windows junk
+*:Zone.Identifier
+
+# Node junk
+node_modules/
