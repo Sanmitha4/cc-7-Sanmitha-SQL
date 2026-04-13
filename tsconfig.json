@@ -1,44 +1,83 @@
+// {
+//   // Visit https://aka.ms/tsconfig to read more about this file
+//   "compilerOptions": {
+//     // File Layout
+//     "rootDir": "./src",
+//     "outDir": "./dist",
+
+//     // Environment Settings
+//     // See also https://aka.ms/tsconfig/module
+//     "module": "nodenext",
+//     "target": "esnext",
+//     // "types": [],
+//     // For nodejs:
+//     // "lib": ["esnext"],
+//     "types": ["node"],
+//     // and npm install -D @types/node
+
+//     // Other Outputs
+//     "sourceMap": true,
+//     "declaration": true,
+//     "declarationMap": true,
+
+//     // Stricter Typechecking Options
+//     "noUncheckedIndexedAccess": true,
+//     "exactOptionalPropertyTypes": true,
+
+//     // Style Options
+//     // "noImplicitReturns": true,
+//     // "noImplicitOverride": true,
+//     // "noUnusedLocals": true,
+//     // "noUnusedParameters": true,
+//     // "noFallthroughCasesInSwitch": true,
+//     // "noPropertyAccessFromIndexSignature": true,
+
+//     // Recommended Options
+//     "strict": true,
+//     "jsx": "react-jsx",
+//     "verbatimModuleSyntax": true,
+//     "isolatedModules": true,
+//     "noUncheckedSideEffectImports": true,
+//     "moduleDetection": "force",
+//     "skipLibCheck": true,
+//   }
+// }
+
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
+    /* Projects & File Layout */
+    "rootDir": "./src",                          /* Where your .ts files live */
+    "outDir": "./dist",                         /* Where your compiled .js files will go */
+    "removeComments": false,                    /* Keep comments for better readability in dist */
 
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
-    // "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    "types": ["node"],
-    // and npm install -D @types/node
+    /* Language and Environment */
+    "target": "ESNext",                         /* Use latest JavaScript features */
+    "module": "NodeNext",                       /* Required for modern Node.js ESM support */
+    "moduleResolution": "NodeNext",             /* Helps resolve .js extensions in imports */
+    "lib": ["ESNext"],    
+    "types": ["node"],                      /* Include standard JS library types */
 
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    /* Decorator Support (CRITICAL) */
+    "experimentalDecorators": true,             /* Enables the @Table syntax */
+    "emitDecoratorMetadata": true,              /* Enables reflection for the ORM */
 
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+    /* Output Settings */
+    "sourceMap": true,                          /* For debugging in WSL/VS Code */
+    "declaration": true,                        /* Generates .d.ts files for type safety */
+    "declarationMap": true,                     /* Maps .d.ts back to source code */
 
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
+    /* Strict Type-Checking */
+    "strict": true,                             /* Enables all strict type-checking options */
+    "noImplicitAny": true,                      /* Error on expressions with implied 'any' type */
+    "strictNullChecks": true,                   /* Ensures you handle null/undefined */
+    "noUncheckedIndexedAccess": true,           /* Checks access to arrays/objects */
 
-    // Recommended Options
-    "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true,
-  }
+    /* Interop Constraints */
+    "esModuleInterop": true,                    /* Support for CommonJS/ESM compatibility */
+    "forceConsistentCasingInFileNames": true,   /* Fixes issues between Windows and Linux/WSL */
+    "skipLibCheck": true,                       /* Speeds up compilation */
+    "verbatimModuleSyntax": true                /* Ensures imports aren't changed by compiler */
+  },
+  "include": ["src/**/*"],                      /* Compile everything in the src folder */
+  "exclude": ["node_modules", "**/*.spec.ts"]   /* Ignore dependencies and test files */
 }
