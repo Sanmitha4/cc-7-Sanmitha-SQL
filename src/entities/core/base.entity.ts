@@ -3,12 +3,17 @@
 import 'reflect-metadata';
 import { TABLE_METADATA_KEY } from '../table.decorator.js';
 import { DB } from './db.js';
+import { Column } from './column.decorator.js';
 
 export interface IBaseEntity {
-    id: number;
+    id?: number|undefined;
+    @Column()
     createdAt: Date;
+    @Column()
     createdBy: number;
+    @Column()
     updatedAt: Date;
+    @Column()
     updatedBy: number;
 }
 

@@ -42,22 +42,22 @@ export class MySqlDriver implements IDatabaseDriver {
 }
 
 
-async save(): Promise<void> {
-    const tableName = (this.constructor as typeof BaseEntity).getTableName();
+// async save(): Promise<void> {
+//     const tableName = (this.constructor as typeof BaseEntity).getTableName();
     
-    // Get white-listed properties from the @Column decorator
-    const whiteListedColumns: string[] = Reflect.getMetadata(COLUMN_METADATA_KEY, this) || [];
+//     // Get white-listed properties from the @Column decorator
+//     const whiteListedColumns: string[] = Reflect.getMetadata(COLUMN_METADATA_KEY, this) || [];
     
-    // Also include base columns (id, createdAt, etc.)
-    const baseColumns = ['id', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'];
-    const allColumns = [...baseColumns, ...whiteListedColumns];
+//     // Also include base columns (id, createdAt, etc.)
+//     const baseColumns = ['id', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'];
+//     const allColumns = [...baseColumns, ...whiteListedColumns];
 
-    // Build values only from white-listed keys
-    const values = allColumns.map(key => (this as any)[key]);
+//     // Build values only from white-listed keys
+//     const values = allColumns.map(key => (this as any)[key]);
     
-    // Use the driver to get the query (Clean Separation of Concerns)
-    const query = DB.driver.getInsertQuery(tableName, allColumns);
+//     // Use the driver to get the query (Clean Separation of Concerns)
+//     const query = DB.driver.getInsertQuery(tableName, allColumns);
     
-    // Add ON DUPLICATE KEY logic if needed, or handle via driver
-    await DB.driver.execute(query, values);
-}
+//     // Add ON DUPLICATE KEY logic if needed, or handle via driver
+//     await DB.driver.execute(query, values);
+// }
