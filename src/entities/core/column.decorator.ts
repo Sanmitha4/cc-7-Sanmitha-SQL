@@ -1,5 +1,3 @@
-
-
 // import 'reflect-metadata';
 
 // // A unique key to identify our metadata
@@ -22,11 +20,9 @@
 //         Reflect.defineMetadata(COLUMN_METADATA_KEY, columns, target);
 //     };
 // }
-
 import "reflect-metadata";
 
 export const COLUMN_METADATA_KEY = Symbol("column");
-
 export interface ColumnOptions {
     name?: string;
 }

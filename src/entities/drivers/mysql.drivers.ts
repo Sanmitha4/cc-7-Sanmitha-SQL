@@ -1,20 +1,39 @@
+import type { ConnectionOptions } from "mysql2";
 import type { IDatabaseDriver } from "../core/db.js";
-
+import { createConnection, Connection } from "mysql2/promise";
 
 export class MySqlDriver implements IDatabaseDriver {
+    private connection: Connection | null = null;
+    private connectionConfig: string | ConnectionOptions;
 
-    connect(): Promise<void> {
-        console.log("[SIMULATING]: Connecting to MySQL database...");
-        return Promise.resolve();
+    constructor(connectionConfig: string | ConnectionOptions) {
+        this.connectionConfig = connectionConfig;
     }
-    disconnect(): Promise<void> {
-        console.log("[SIMULATING]: Disconnecting from MySQL database...");
-        return Promise.resolve();
+
+    async connect(): Promise<void> {
+        if (this.connection) {
+            return;
+        }
+        this.connection = await (typeof this.connectionConfig === "string" ? createConnection(this.connectionConfig) : createConnection(this.connectionConfig));
+        await this.connection.query("SELECT 1");
     }
-    execute(query: string, params?: any[]): Promise<any> {
-        console.log("[SIMULATING]: Executing query...", query, params);
-        return Promise.resolve();
+
+    async disconnect(): Promise<void> {
+        if (!this.connection) {
+            return;
+        }
+        await this.connection.end();
+        this.connection = null;
     }
+
+    async execute(query: string, params?: any[]): Promise<any> {
+        if (!this.connection) {
+            throw new Error("Not connected to the database");
+        }
+        const [results] = await this.connection.execute(query, params);
+        return results;
+    }
+    
     getPlaceholderPrefix(): string {
         return '?';
     }
@@ -22,7 +41,7 @@ export class MySqlDriver implements IDatabaseDriver {
         const placeholders = columns.map(() => this.getPlaceholderPrefix()).join(', ');
         return `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES (${placeholders})`;
     }
-    
+
     getUpdateQuery(tableName: string, columns: string[], conditions: Record<string, unknown>): string {
         console.log("[SIMULATING]: Updating query...", tableName, columns, conditions);
         return ''
@@ -42,22 +61,3 @@ export class MySqlDriver implements IDatabaseDriver {
 }
 
 
-// async save(): Promise<void> {
-//     const tableName = (this.constructor as typeof BaseEntity).getTableName();
-    
-//     // Get white-listed properties from the @Column decorator
-//     const whiteListedColumns: string[] = Reflect.getMetadata(COLUMN_METADATA_KEY, this) || [];
-    
-//     // Also include base columns (id, createdAt, etc.)
-//     const baseColumns = ['id', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'];
-//     const allColumns = [...baseColumns, ...whiteListedColumns];
-
-//     // Build values only from white-listed keys
-//     const values = allColumns.map(key => (this as any)[key]);
-    
-//     // Use the driver to get the query (Clean Separation of Concerns)
-//     const query = DB.driver.getInsertQuery(tableName, allColumns);
-    
-//     // Add ON DUPLICATE KEY logic if needed, or handle via driver
-//     await DB.driver.execute(query, values);
-// }
