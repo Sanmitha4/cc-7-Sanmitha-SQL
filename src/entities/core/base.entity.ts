@@ -132,7 +132,7 @@
 
 import { DB } from "./db.js";
 import { Column, getColumnSqlName } from "./column.decorator.js";
-import type { TABLE_METADATA_KEY } from "./table.decorator.js";
+import { TABLE_METADATA_KEY } from "./table.decorator.js";
 
 export interface IBaseEntity {
     id?: number | undefined;

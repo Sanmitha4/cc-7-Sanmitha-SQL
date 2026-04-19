@@ -86,7 +86,49 @@ export class PostgreSqlDriver implements IDatabaseDriver {
 
     getInsertQuery(tableName: string, columns: string[]): string {
         const placeholders = columns.map((_, i) => this.getNumberedPlaceholder(i + 1)).join(', ');
-        // Adding RETURNING * is a common PostgreSQL practice to get the inserted row back immediately
         return `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES (${placeholders}) RETURNING *`;
+    }
+
+    getUpdateQuery(tableName: string, columns: string[], conditions: Record<string, unknown>): string {
+        let paramIndex = 1;
+        const setClause = columns.map(col => `${col} = ${this.getNumberedPlaceholder(paramIndex++)}`).join(', ');
+        const conditionKeys = Object.keys(conditions);
+        const whereClause = conditionKeys.length > 0 ? ` WHERE ${conditionKeys.map(k => `${k} = ${this.getNumberedPlaceholder(paramIndex++)}`).join(' AND ')}` : '';
+        return `UPDATE ${tableName} SET ${setClause}${whereClause} RETURNING *`;
+    }
+
+    getDeleteQuery(tableName: string, conditions: Record<string, unknown>, limit?: number, offset?: number): string {
+        const conditionKeys = Object.keys(conditions);
+        const whereClause = conditionKeys.length > 0 ? ` WHERE ${conditionKeys.map((k, i) => `${k} = ${this.getNumberedPlaceholder(i + 1)}`).join(' AND ')}` : '';
+        let limitClause = '';
+        if (limit !== undefined) {
+            const offsetParamIdx = Object.keys(conditions).length + 1;
+            limitClause = ` LIMIT ${this.getNumberedPlaceholder(offsetParamIdx)}`;
+            if (offset !== undefined) {
+                limitClause += ` OFFSET ${this.getNumberedPlaceholder(offsetParamIdx + 1)}`;
+            }
+        }
+        return `DELETE FROM ${tableName}${whereClause}${limitClause} RETURNING *`;
+    }
+
+    getSelectQuery(tableName: string, columns: string[], conditions?: Record<string, unknown>, limit?: number, offset?: number): string {
+        const columnList = columns.join(', ');
+        const conditionKeys = conditions ? Object.keys(conditions) : [];
+        const whereClause = conditionKeys.length > 0 ? ` WHERE ${conditionKeys.map((k, i) => `${k} = ${this.getNumberedPlaceholder(i + 1)}`).join(' AND ')}` : '';
+        let limitClause = '';
+        let paramOffset = conditionKeys.length;
+        if (limit !== undefined) {
+            limitClause = ` LIMIT ${this.getNumberedPlaceholder(++paramOffset)}`;
+            if (offset !== undefined) {
+                limitClause += ` OFFSET ${this.getNumberedPlaceholder(++paramOffset)}`;
+            }
+        }
+        return `SELECT ${columnList} FROM ${tableName}${whereClause}${limitClause}`;
+    }
+
+    getCountQuery(tableName: string, conditions?: Record<string, unknown>): string {
+        const conditionKeys = conditions ? Object.keys(conditions) : [];
+        const whereClause = conditionKeys.length > 0 ? ` WHERE ${conditionKeys.map((k, i) => `${k} = ${this.getNumberedPlaceholder(i + 1)}`).join(' AND ')}` : '';
+        return `SELECT COUNT(*) as count FROM ${tableName}${whereClause}`;
     }
 }

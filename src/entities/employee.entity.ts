@@ -1,4 +1,5 @@
 import { BaseEntity, type IBaseEntity } from "./core/base.entity.js";
+import { Column } from "./core/column.decorator.js";
 import { Table, TABLE_METADATA_KEY } from "./core/table.decorator.js";
 export interface IEmployee extends IBaseEntity {
 
@@ -11,10 +12,10 @@ export interface IEmployee extends IBaseEntity {
 @Table('employees')
 export class Employee extends BaseEntity implements IEmployee {
 
-    name: string;
-    position: string;
-    department: string;
-    salary: number;
+    @Column() name: string;
+    @Column() position: string;
+    @Column() department: string;
+    @Column() salary: number;
 
     constructor(employee: IEmployee) {
         super(employee);

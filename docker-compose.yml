@@ -9,9 +9,11 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: user_password
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - orm_network
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -24,6 +26,42 @@ services:
       MYSQL_ROOT_PASSWORD: root_password
     depends_on:
       - db
+    networks:
+      - orm_network
+
+  postgres_db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: postgres_orm_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - orm_network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_gui
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres_db
+    networks:
+      - orm_network
 
 volumes:
   db_data:
+  postgres_data:
+
+networks:
+  orm_network:
+    driver: bridge
