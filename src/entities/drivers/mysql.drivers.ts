@@ -90,15 +90,15 @@ export class MySqlDriver implements IDatabaseDriver {
                     : await createConnection(this.connectionConfig);
                 await conn.query("SELECT 1");
                 this.connection = conn;
-                console.log(`✅ MySQL connected (attempt ${attempt})`);
+                console.log(`MySQL connected (attempt ${attempt})`);
                 return;
             } catch (err) {
                 lastError = err;
-                console.warn(`⏳ MySQL not ready yet (attempt ${attempt}/${RETRY_ATTEMPTS}), retrying in ${RETRY_DELAY_MS / 1000}s…`);
+                console.warn(`MySQL not ready yet (attempt ${attempt}/${RETRY_ATTEMPTS}), retrying in ${RETRY_DELAY_MS / 1000}s…`);
                 await sleep(RETRY_DELAY_MS);
             }
         }
-        throw new Error(`❌ Could not connect to MySQL after ${RETRY_ATTEMPTS} attempts.\nLast error: ${lastError}`);
+        throw new Error(`Could not connect to MySQL after ${RETRY_ATTEMPTS} attempts.\nLast error: ${lastError}`);
     }
 
     async disconnect(): Promise<void> {

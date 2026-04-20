@@ -160,16 +160,16 @@ export class PostgreSqlDriver implements IDatabaseDriver {
                 await client.connect();
                 await client.query("SELECT 1");
                 this.client = client;
-                console.log(`✅ PostgreSQL connected (attempt ${attempt})`);
+                console.log(`PostgreSQL connected (attempt ${attempt})`);
                 return;
             } catch (err) {
                 lastError = err;
                 try { await client.end(); } catch { /* ignore */ }
-                console.warn(`⏳ PostgreSQL not ready yet (attempt ${attempt}/${RETRY_ATTEMPTS}), retrying in ${RETRY_DELAY_MS / 1000}s…`);
+                console.warn(` PostgreSQL not ready yet (attempt ${attempt}/${RETRY_ATTEMPTS}), retrying in ${RETRY_DELAY_MS / 1000}s…`);
                 await sleep(RETRY_DELAY_MS);
             }
         }
-        throw new Error(`❌ Could not connect to PostgreSQL after ${RETRY_ATTEMPTS} attempts.\nLast error: ${lastError}`);
+        throw new Error(`Could not connect to PostgreSQL after ${RETRY_ATTEMPTS} attempts.\nLast error: ${lastError}`);
     }
 
     async disconnect(): Promise<void> {
