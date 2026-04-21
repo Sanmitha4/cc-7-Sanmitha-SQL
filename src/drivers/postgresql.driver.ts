@@ -33,7 +33,7 @@ export class PostgreSqlDriver implements IDatabaseDriver {
         try {
           await client.end();
         } catch {
-          /* ignore */
+          
         }
         console.warn(
           `PostgreSQL not ready yet (attempt ${attempt}/${RETRY_ATTEMPTS}), retrying in ${RETRY_DELAY_MS / 1000}s…`,
@@ -95,6 +95,7 @@ export class PostgreSqlDriver implements IDatabaseDriver {
     const placeholders = columns
       .map((_, i) => this.placeholder(i + 1))
       .join(", ");
+      //It uses .filter((c) => c !== "id") to ensure you are never attempting to update the primary key during an upsert, which would cause a database error.
     const updateClause = columns
       .filter((c) => c !== "id")
       .map((c) => `${c} = EXCLUDED.${c}`)
