@@ -16,7 +16,7 @@ export class Employee extends BaseEntity implements IEmployee {
   @Column() department: string;
   @Column() salary: number;
 
-  constructor(employee:Record<string, any>) {
+  constructor(employee: Record<string, any>) {
     super(employee);
     this.name = employee.name;
     this.position = employee.position;
