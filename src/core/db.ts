@@ -1,3 +1,5 @@
+import type { QueryWithParams, WhereCondition } from "./query.types.js";
+
 export interface IDatabaseDriver {
     connect(): Promise<void>;
     disconnect(): Promise<void>;
@@ -5,10 +7,10 @@ export interface IDatabaseDriver {
 
     getPlaceholderPrefix(): string;
     getInsertQuery(tableName: string, columns: string[]): string;
-    getUpdateQuery(tableName: string, columns: string[], conditions: Record<string, unknown>): string;
-    getDeleteQuery(tableName: string, conditions: Record<string, unknown>, limit?: number, offset?: number): string;
-    getSelectQuery(tableName: string, columns: string[], conditions?: Record<string, unknown>, limit?: number, offset?: number): string;
-    getCountQuery(tableName: string, conditions?: Record<string, unknown>): string;
+    getUpdateQuery(tableName: string, columns: string[], conditions: WhereCondition): QueryWithParams;
+    getDeleteQuery(tableName: string, conditions: WhereCondition, limit?: number, offset?: number): QueryWithParams;
+    getSelectQuery(tableName: string, columns: string[], conditions?: WhereCondition, limit?: number, offset?: number): QueryWithParams;
+    getCountQuery(tableName: string, conditions?: WhereCondition): QueryWithParams;
 }
 
 export class DB {
